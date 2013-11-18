@@ -59,7 +59,12 @@
 
 \newcommand{\urlnop}[1]{\href{http://#1}{\texttt{#1}}}
 
-\newenvironment{ttoutenv}{\begin{alltt}\small}{\end{alltt}}
+\newenvironment{ttoutenv}{
+  \alltt % start alltt
+  \begingroup\lccode`~=`' % make ~ a ' in \lowercase
+  \lowercase{\endgroup\let~\textquotesingle}% make active ' call \textquotesingle
+  \catcode`\'=\active % make ' active
+  }{\endalltt}
 
 \newcommand{\totype}[1]{\texttt{\small #1}}
 
