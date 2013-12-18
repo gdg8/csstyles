@@ -1,6 +1,7 @@
 \usepackage{lettrine}
 \usepackage{newfloat}
 \usepackage{caption}
+\usepackage{enumitem}
 
 \DeclareFloatingEnvironment[fileext=frm,placement={hb},name=Breakout]{myfloat}
 \captionsetup[myfloat]{labelfont=bf,font=bf,size=large,skip=2pt}
@@ -67,10 +68,20 @@
   {\end{staticframe}}
 
 \newenvironment{danger}[1]{%
-  \begin{staticframe}
-    \caption{#1}
-    \lettrine[lines=4]{\includegraphics[width=2cm]{images/bomb}}{}}%
-  {\end{staticframe}}
+\FloatBarrier\begin{description}[leftmargin=1.7cm,labelsep=0cm,align=left,style=multiline]%
+\item[\raisebox{-0.9cm}{\includegraphics[width=1.5cm]{images/bomb}}]\textbf{#1.}}%
+{\end{description}}
+
+\newenvironment{roadblock}[1]{%
+\FloatBarrier\begin{description}[leftmargin=1.7cm,labelsep=0cm,align=left,style=multiline]%
+\item[\raisebox{-0.9cm}{\includegraphics[width=1.5cm]{images/roadblock}}]\textbf{#1.}}%
+{\end{description}}
+
+% \newenvironment{danger}[1]{%
+%   \begin{staticframe}
+%     \caption{#1}
+%     \lettrine[lines=4]{\includegraphics[width=2cm]{images/bomb}}{}}%
+%   {\end{staticframe}}
 
 \newenvironment{question}[1]{%
   \begin{staticframe}
@@ -223,7 +234,7 @@
 \newbreakoutfloat{wikip}{Wikipedia-logo}
 \newbreakoutstatic{wikip*}{Wikipedia-logo}
 
-\newbreakoutstatic{danger}{bomb}
+%\newbreakoutstatic{danger}{bomb}
 
 %\newbreakoutfloat{diversion}{diversion}
 \newbreakoutstatic{diversion*}{diversion}
