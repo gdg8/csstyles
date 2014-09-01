@@ -52,6 +52,15 @@
 ]{biblatex}
 \setlength\bibitemsep{1.5\itemsep}
 
+\fancyfoot[L]{\footnotesize\today} 
+\fancypagestyle{plain}{%
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[R]{\bfseries \thepage} 
+\fancyfoot[L]{\footnotesize\today} 
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}%
+}
+
 \newcommand{\tqs}{\textquotesingle}
 \newcommand{\tat}{\textasciitilde}
 
@@ -211,7 +220,7 @@
 \subtitle{\fbox{\huge \textbf{LAB STAFF VERSION}}\\[3ex]}
 \fancypagestyle{plain}{%
 \fancyhf{} % clear all header and footer fields
-\fancyfoot[C]{\bfseries \thepage} 
+\fancyfoot[R]{\bfseries \thepage} 
 \fancyfoot[L]{\footnotesize\today} 
 \fancyhead[C]{\bfseries \Large LAB STAFF VERSION} 
 \renewcommand{\headrulewidth}{0pt}
@@ -232,7 +241,6 @@
    {\par\end{mdframed}}%
 
 \fancyhead[l]{\textbf{\@coursecode: STAFF VERSION}}
-\fancyfoot[l]{\footnotesize\today} 
 }
 
 \ProcessOptions
