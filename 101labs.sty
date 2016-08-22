@@ -13,11 +13,35 @@
 \definecolor{dark-gray}{gray}{0.3}
 \definecolor{capgrey}{gray}{0.4}
 
+\usepackage{ifthen}
+\newboolean{@shownotes}
+\setboolean{@shownotes}{false}
+
+\newboolean{@demo}
+\setboolean{@demo}{false}
+
+\newboolean{@pgt}
+\setboolean{@pgt}{false}
+
+\newcommand{\pgtcommand}[1]{\ifthenelse{\boolean{@pgt}}{#1}{}}
+\newcommand{\firstcommand}[1]{\ifthenelse{\boolean{@pgt}}{}{#1}}
+
+\newcommand{\firstorpgt}[2]{\ifthenelse{\boolean{@pgt}}{PG #2}{UG #1}}
+
+\usepackage{comment}
+
+\excludecomment{note}
+\excludecomment{pgtonly}
+\includecomment{firstonly}
+\excludecomment{demonote}
+\excludecomment{demonote*}
+\excludecomment{modelanswers}
+
 \usepackage{listings}
 \lstloadlanguages{bash,[LaTeX]TeX}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{handout}
+%\usepackage{handout}
 \usepackage{textcomp}
 \usepackage{lipsum}
 \usepackage{breakbox}
@@ -33,15 +57,6 @@
 
 \usepackage{subcaption}
 
-\usepackage{ifthen}
-\newboolean{@shownotes}
-\setboolean{@shownotes}{false}
-
-\newboolean{@demo}
-\setboolean{@demo}{false}
-
-
-
 \usepackage[
     backend=biber,
     style=authoryear,
@@ -51,15 +66,6 @@
     eprint=false
 ]{biblatex}
 \setlength\bibitemsep{1.5\itemsep}
-
-\fancyfoot[L]{\footnotesize\today} 
-\fancypagestyle{plain}{%
-\fancyhf{} % clear all header and footer fields
-\fancyfoot[R]{\bfseries \thepage} 
-\fancyfoot[L]{\footnotesize\today} 
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}%
-}
 
 \newcommand{\tqs}{\textquotesingle}
 \newcommand{\tat}{\textasciitilde}
@@ -177,13 +183,6 @@
 
 \usepackage{minitoc}
 
-\usepackage{comment}
-
-\excludecomment{note}
-\excludecomment{demonote}
-\excludecomment{demonote*}
-\excludecomment{modelanswers}
-
 \newcommand{\notesurl}[1]{\begin{stdframe}{yellow!20} %
     These notes are available online at \\{\small \urlnop{studentnet.cs.manchester.ac.uk/ugt/COMP10120/labscripts/#1.pdf}}%
   \end{stdframe}%
@@ -200,6 +199,7 @@
   \end{stdframe}%
 }
 
+
 \DeclareOption{shownotes}{%
 \setboolean{@shownotes}{true}%
 \specialcomment{note}{
@@ -207,43 +207,84 @@
   \bfseries {\Large Note to authors:\\[1ex]}\itshape}%
 {\end{stdframe}}}
 
+% Use option pgt for pgt version
+\DeclareOption{pgt}{%
+  \setboolean{@pgt}{true}%
+  \includecomment{pgtonly}
+  \excludecomment{firstonly}
+  \renewcommand\thesection {\@arabic\c@section}
+  }
+
+  
 % Use option demo to include mark scheme
 \DeclareOption{demo}{%
 \setboolean{@demo}{true}%
-
+}
 % \specialcomment{demonote}{%
 %    \begin{quote}%\raggedright%
 % %   \textbf{Notes for lab staff on Task\ \thetaskctr}\\[2ex]}%
 %    \textbf{Notes for lab staff on Task\ \thetaskctr}\\[2ex]}%
 %    {\par\end{quote}}%
 
-\subtitle{\fbox{\huge \textbf{LAB STAFF VERSION}}\\[3ex]}
-\fancypagestyle{plain}{%
-\fancyhf{} % clear all header and footer fields
-\fancyfoot[R]{\bfseries \thepage} 
-\fancyfoot[L]{\footnotesize\today} 
-\fancyhead[C]{\bfseries \Large LAB STAFF VERSION} 
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}}
-\def\@docversion{:LAB STAFF VERSION}
-\specialcomment{modelanswers}{\clearpage\gdef\@righthead{Model Answers}}{}
-%
-\specialcomment{demonote}{%
-   \begin{mdframed}[outerlinewidth=0.5,%
-     leftmargin=5,%
-     rightmargin=5,%
-     innertopmargin=\topskip,%
-     splittopskip=\topskip,skipbelow=\baselineskip,%
-     roundcorner=2pt,linecolor=gray,%
-     skipabove=\baselineskip,backgroundcolor=light-gray]%\begin{quote}%
-   \textbf{Notes for lab staff}\\[2ex]}%
-%   {\par\end{quote}\end{mdframed}}%
-   {\par\end{mdframed}}%
 
-\fancyhead[l]{\textbf{\@coursecode: STAFF VERSION}}
-}
-
-\ProcessOptions
+\ProcessOptions\relax
 
   
+
+\begin{firstonly}
+  \usepackage{handout}
+  
+  \ifthenelse{\boolean{@demo}}{%
+    \subtitle{\fbox{\huge \textbf{LAB STAFF VERSION}}\\[3ex]}%
+    \fancypagestyle{plain}{%
+      \fancyhf{} % clear all header and footer fields%
+      \fancyhead[C]{\bfseries \Large LAB STAFF VERSION} %
+      \fancyhead[l]{\textbf{\@coursecode: STAFF VERSION}}
+      }%
+      \def\@docversion{:LAB STAFF VERSION}
+      \specialcomment{modelanswers}{\clearpage\gdef\@righthead{Model Answers}}{}
+      % 
+      \specialcomment{demonote}{%
+        \begin{mdframed}[outerlinewidth=0.5,%
+          leftmargin=5,%
+          rightmargin=5,%
+          innertopmargin=\topskip,%
+          splittopskip=\topskip,skipbelow=\baselineskip,%
+          roundcorner=2pt,linecolor=gray,%
+          skipabove=\baselineskip,backgroundcolor=light-gray]%\begin{quote}%
+          \textbf{Notes for lab staff}\\[2ex]}%
+        % {\par\end{quote}\end{mdframed}}%
+        {\par\end{mdframed}}%
+}{}
+
+  \fancypagestyle{plain}{%
+    \fancyhf{} % clear all header and footer fields
+    \fancyfoot[R]{\bfseries \thepage} 
+    \fancyfoot[L]{\footnotesize\today} 
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}%
+  }
+\end{firstonly}
+
+\begin{pgtonly}
+\usepackage{fancyhdr,a4-mancs}
+\end{pgtonly}
+
+\mkcmdanchor{echo}{Miscellaneous}
+\mkcmdanchor{ls}{File_System_Utilities} 
+\mkcmdanchor{mkdir}{File_System_Utilities} 
+\mkcmdanchor{cd}{File_System_Utilities} 
+\mkcmdanchor{pwd}{File_System_Utilities}  
+\mkcmdanchor{rm}{File_System_Utilities}   
+\mkcmdanchor{mv}{File_System_Utilities}    
+\mkcmdanchor{which}{Finding_Files}    
+\mkcmdanchor{gzip}{File_Compression}
+\mkcmdanchor{zip}{File_Compression}
+\mkcmdanchor{tar}{File_Compression}
+\mkcmdanchor{man}{Getting_Help}
+\mkcmdanchor{less}{File_Viewing}
+\mkcmdanchor{more}{File_Viewing}
+\mkcmdanchor{cat}{File_Viewing}
+\mkcmdanchor{head}{File_Viewing}
+\mkcmdanchor{tail}{File_Viewing}
 
