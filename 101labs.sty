@@ -26,7 +26,7 @@
 \newcommand{\pgtcommand}[1]{\ifthenelse{\boolean{@pgt}}{#1}{}}
 \newcommand{\firstcommand}[1]{\ifthenelse{\boolean{@pgt}}{}{#1}}
 
-\newcommand{\firstorpgt}[2]{\ifthenelse{\boolean{@pgt}}{PG #2}{UG #1}}
+\newcommand{\firstorpgt}[2]{\ifthenelse{\boolean{@pgt}}{#2}{#1}}
 
 \usepackage{comment}
 
@@ -185,6 +185,7 @@
 
 \newcommand{\notesurl}[1]{\begin{stdframe}{yellow!20} %
     These notes are available online at \\{\small \urlnop{studentnet.cs.manchester.ac.uk/ugt/COMP10120/labscripts/#1.pdf}}%
+    \\ You may find it useful to use the online version so that you can follow web links.
   \end{stdframe}%
   }
 
